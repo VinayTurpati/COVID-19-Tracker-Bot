@@ -1,0 +1,89 @@
+# Configuration for Rasa NLU.
+# https://rasa.com/docs/rasa/nlu/components/
+
+language: en
+
+
+#pipeline:
+#  - name: WhitespaceTokenizer
+#  - name: RegexFeaturizer
+#  - name: LexicalSyntacticFeaturizer
+#  - name: CountVectorsFeaturizer
+#  - name: CountVectorsFeaturizer
+#   analyzer: "char_wb"
+#    min_ngram: 1
+#    max_ngram: 4
+#  - name: DIETClassifier
+#    epochs: 100
+#  - name: EntitySynonymMapper
+#  - name: ResponseSelector
+#    epochs: 100
+
+pipeline:
+- name: "SpacyNLP"
+ # language model to load
+  model: "en_core_web_sm"
+
+  # when retrieving word vectors, this will decide if the casing
+  # of the word is relevant. E.g. `hello` and `Hello` will
+  # retrieve the same vector, if set to `False`. For some
+  # applications and models it makes sense to differentiate
+  # between these two words, therefore setting this to `True`.
+  #case_sensitive: False
+#- name: "SpacyEntityExtractor"
+  # dimensions to extract
+  dimensions: ["LOC", "GPE"]
+  #model: "en_core_web_sm"
+- name: "WhitespaceTokenizer"
+- name: "RegexFeaturizer"
+- name: "CRFEntityExtractor"
+- name: "EntitySynonymMapper"
+- name: "CountVectorsFeaturizer"
+  analyzer: "char_wb"
+  min_ngram: 1
+  max_ngram: 4
+- name: "EmbeddingIntentClassifier"
+- name: "ResponseSelector"
+#- name: "SpacyTokenizer"
+#- name: "SpacyFeaturizer"
+#- name: "RegexFeaturizer"
+- name: "SpacyEntityExtractor"
+#- name: "CRFEntityExtractor"
+#- name: "EntitySynonymMapper"
+#- name: "DIETClassifier"
+#- name: "SklearnIntentClassifier"
+#- name: "ResponseSelector"
+- name: DucklingHTTPExtractor
+  url: http://13.126.127.146:8000
+  dimensions: 
+    - "number"
+    - "time"
+    - "duration"
+  locale: en_US
+  timezone: Europe/Berlin
+#- name: "SpacyNLP"
+  # language model to load
+ # model: "en_core_web_sm"
+
+  # when retrieving word vectors, this will decide if the casing
+  # of the word is relevant. E.g. `hello` and `Hello` will
+  # retrieve the same vector, if set to `False`. For some
+  # applications and models it makes sense to differentiate
+  # between these two words, therefore setting this to `True`.
+  #case_sensitive: False
+#- name: "SpacyEntityExtractor"
+  # dimensions to extract
+ # dimensions: ["LOC", "GPE"]
+
+# Configuration for Rasa Core.
+# https://rasa.com/docs/rasa/core/policies/
+policies:
+  - name: MemoizationPolicy
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
+  - name: MappingPolicy
+  - name: FallbackPolicy
+    fallback_action_name: 'utter_fallback_default_msg'
+    nlu_threshold: 0.7
+    core_threshold: 0.7
