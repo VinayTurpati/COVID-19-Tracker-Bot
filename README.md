@@ -18,6 +18,18 @@ Prerequisite:
   * spacy
   * en_core_web_sm spacy model
 
+How to use:
+* Change slack access token
+* Run RASA chatbot
+* Run Duckling for NER
+* Run Image Serving Flask app
+
+## How to change Slack Access token
+1. Follow the procedure [https://rasa.com/docs/rasa/user-guide/connectors/slack/] to generate Slack access token for RASA bot here.
+2. change the access token in slack_token: "" [https://github.com/narendraprasath/COVID-19-Tracker-Bot/blob/c30ec8e6d3a94affc5a3fdd335a0417d5f10f23b/COVID-19-Tracker-Chatbot_Code/credentials.yml#L16]
+
+After changed the access token, follow below procedure.
+
 ## How to RASA Bot:
 Go to COVID-19-Tracker-Chatbot_Code folder and execute following commands.
 
